@@ -27,6 +27,7 @@ def main():
         end_date,
         sponsor_info,
         link_to_profile,
+        include_forks,
     ) = env.get_env_vars()
 
     # Auth to GitHub.com
@@ -46,7 +47,13 @@ def main():
 
     # Get the contributors
     contributors = get_all_contributors(
-        organization, repository_list, start_date, end_date, github_connection, ghe
+        organization,
+        repository_list,
+        start_date,
+        end_date,
+        github_connection,
+        include_forks,
+        ghe,
     )
 
     # Check for new contributor if user provided start_date and end_date
@@ -59,6 +66,7 @@ def main():
             start_date="2008-02-29",  # GitHub was founded on 2008-02-29
             end_date=start_date,
             github_connection=github_connection,
+            forks=include_forks,
             ghe=ghe,
         )
         for contributor in contributors:
@@ -102,6 +110,7 @@ def get_all_contributors(
     start_date: str,
     end_date: str,
     github_connection: object,
+    include_forks: bool,
     ghe: str,
 ):
     """
@@ -112,6 +121,7 @@ def get_all_contributors(
         repository_list (List[str]): The repository list for which the contributors are being listed.
         start_date (str): The start date of the date range for the contributor list.
         end_date (str): The end date of the date range for the contributor list.
+        include_forks (bool): Whether to include contributor information from forks.
         github_connection (object): The authenticated GitHub connection object from PyGithub
 
     Returns:
@@ -130,9 +140,10 @@ def get_all_contributors(
     all_contributors = []
     if repos:
         for repo in repos:
-            repo_contributors = get_contributors(repo, start_date, end_date, ghe)
-            if repo_contributors:
-                all_contributors.append(repo_contributors)
+            if include_forks or not repo.fork:
+                repo_contributors = get_contributors(repo, start_date, end_date, ghe)
+                if repo_contributors:
+                    all_contributors.append(repo_contributors)
 
     # Check for duplicates and merge when usernames are equal
     all_contributors = contributor_stats.merge_contributors(all_contributors)

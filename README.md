@@ -46,10 +46,10 @@ Find out more in the [GitHub API documentation](https://docs.github.com/en/rest/
    - `END_DATE`
 
    If no **start and end date** are supplied, the action will consider the entire repository history and be unable to determine if contributors are new or returning.
-   If running on a whole **organization** then no repository is needed.  
+   If running on a whole **organization** then no repository is needed.
    If running the action on just **one repository** or a **list of repositories**, then no organization is needed.
 
-1. Also edit the value for `GH_ENTERPRISE_URL` if you are using a GitHub Server and not using github.com.  
+1. Also edit the value for `GH_ENTERPRISE_URL` if you are using a GitHub Server and not using github.com.
    For github.com users, leave it empty.
 1. If you are running this action on an organization or repository other than the one where the workflow file is going to be, then update the value of `GH_TOKEN`.
    - Do this by creating a [GitHub API token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) with permissions to read the repository/organization and write issues.
@@ -94,6 +94,7 @@ This action can be configured to authenticate with GitHub App Installation or Pe
 | `END_DATE`          | False                                           | Current Date      | The date at which you want to stop gathering contributor information. Must be later than the `START_DATE`. ie. Aug 2nd, 2023 would be `2023-08-02`                                                                       |
 | `SPONSOR_INFO`      | False                                           | False             | If you want to include sponsor information in the output. This will include the sponsor count and the sponsor URL. This will impact action performance. ie. SPONSOR_INFO = "False" or SPONSOR_INFO = "True"              |
 | `LINK_TO_PROFILE`   | False                                           | True              | If you want to link usernames to their GitHub profiles in the output. ie. LINK_TO_PROFILE = "True" or LINK_TO_PROFILE = "False"                                                                                          |
+| `INCLUDE_FORKS`     | False                                           | True              | Whether to include contributor information from forks. INCLUDE_FORKS = "True" or INCLUDE_FORKS = "False"                                                                                                                 |
 
 **Note**: If `start_date` and `end_date` are specified then the action will determine if the contributor is new. A new contributor is one that has contributed in the date range specified but not before the start date.
 
